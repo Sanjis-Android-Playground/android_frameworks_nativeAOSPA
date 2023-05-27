@@ -25,9 +25,10 @@ enum {
     ON_BUFFER_RELEASED = IBinder::FIRST_CALL_TRANSACTION,
     NEEDS_RELEASE_NOTIFY,
     ON_BUFFERS_DISCARDED,
-    ON_BUFFER_DETACHED,
     ON_BUFFER_ATTACHED,
     NEEDS_ATTACH_NOTIFY,
+    // MIUI ADD
+    ON_BUFFER_DETACHED,
 };
 
 class BpProducerListener : public BpInterface<IProducerListener>
@@ -69,6 +70,7 @@ public:
     }
 
 #if COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(BQ_CONSUMER_ATTACH_CALLBACK)
+    // MIUI ADD: START
     virtual void onBufferDetached(int slot) {
         Parcel data, reply;
         data.writeInterfaceToken(IProducerListener::getInterfaceDescriptor());
@@ -123,6 +125,12 @@ public:
     virtual void onBuffersDiscarded(const std::vector<int32_t>& discardedSlots) override {
         return mBase->onBuffersDiscarded(discardedSlots);
     }
+
+    // MIUI ADD: START
+    virtual void onBufferDetached(int slot) {
+        mBase->onBufferDetached(slot);
+    }
+    // MIUI ADD: END
 };
 
 IMPLEMENT_HYBRID_META_INTERFACE(ProducerListener,
@@ -171,6 +179,14 @@ status_t BnProducerListener::onTransact(uint32_t code, const Parcel& data,
             reply->writeBool(needsAttachNotify());
             return NO_ERROR;
 #endif
+        // MIUI ADD: START
+        case ON_BUFFER_DETACHED:
+            int slot = 0;
+            CHECK_INTERFACE(IProducerListener, data, reply);
+            data.readInt32(&slot);
+            onBufferDetached(slot);
+            return NO_ERROR;
+        // MIUI ADD: END
     }
     return BBinder::onTransact(code, data, reply, flags);
 }
@@ -184,4 +200,9 @@ bool BnProducerListener::needsReleaseNotify() {
 void BnProducerListener::onBuffersDiscarded(const std::vector<int32_t>& /*discardedSlots*/) {
 }
 
+// MIUI ADD: START
+void BnProducerListener::onBufferDetached(int slot) {
+    ALOGE("BnProducerListener::onBufferDetached slot: %d",slot);
+}
+// MIUI ADD: END
 } // namespace android

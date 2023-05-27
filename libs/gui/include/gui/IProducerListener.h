@@ -51,6 +51,7 @@ public:
     // onBuffersFreed is called from IGraphicBufferConsumer::discardFreeBuffers
     // to notify the producer that certain free buffers are discarded by the consumer.
     virtual void onBuffersDiscarded(const std::vector<int32_t>& slots) = 0; // Asynchronous
+<<<<<<< HEAD
     // onBufferDetached is called from IGraphicBufferConsumer::detachBuffer to
     // notify the producer that a buffer slot is free and ready to be dequeued.
     //
@@ -67,6 +68,11 @@ public:
     virtual void onBufferAttached() {} // Asynchronous
     virtual bool needsAttachNotify() { return false; }
 #endif
+=======
+
+    // MIUI ADD
+    virtual void onBufferDetached(int slot) = 0;
+>>>>>>> ebdbdd810c (Native: ProducerListener: Import ON_BUFFER_DETACHED Changes)
 };
 
 #ifndef NO_BINDER
@@ -90,6 +96,8 @@ public:
             Parcel* reply, uint32_t flags = 0);
     virtual bool needsReleaseNotify();
     virtual void onBuffersDiscarded(const std::vector<int32_t>& slots);
+    // MIUI ADD
+    virtual void onBufferDetached(int slot);
 };
 
 #else
@@ -103,6 +111,8 @@ public:
     virtual ~StubProducerListener();
     virtual void onBufferReleased() {}
     virtual bool needsReleaseNotify() { return false; }
+    // MIUI ADD
+    virtual void onBufferDetached(int /**slot**/) {}
 };
 
 } // namespace android
