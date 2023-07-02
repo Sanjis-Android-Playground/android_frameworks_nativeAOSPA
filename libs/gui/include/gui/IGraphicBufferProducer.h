@@ -679,6 +679,7 @@ public:
     // the width and height used for dequeueBuffer will be additionally swapped.
     virtual status_t setAutoPrerotation(bool autoPrerotation);
 
+<<<<<<< HEAD
 #if COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(BQ_SETFRAMERATE)
     // Sets the apps intended frame rate.
     virtual status_t setFrameRate(float frameRate, int8_t compatibility,
@@ -688,6 +689,12 @@ public:
 #if COM_ANDROID_GRAPHICS_LIBGUI_FLAGS(BQ_EXTENDEDALLOCATE)
     virtual status_t setAdditionalOptions(const std::vector<gui::AdditionalOptions>& options);
 #endif
+=======
+    // MIUI ADD:
+    // Adjust the maximum number of buffers that can be dequeued by the producer
+    // at one time by setMaxDequeuedBufferCount.
+    virtual status_t adjustMaxDequeuedBufferCount(int) { return INVALID_OPERATION; }
+>>>>>>> 0186fd3f14 (BlastBufferQueque: Import Xiaomi Android 13 BlastBuffer Changes)
 
     struct RequestBufferOutput : public Flattenable<RequestBufferOutput> {
         RequestBufferOutput() = default;

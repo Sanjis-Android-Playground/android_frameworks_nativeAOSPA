@@ -51,7 +51,6 @@ public:
     // onBuffersFreed is called from IGraphicBufferConsumer::discardFreeBuffers
     // to notify the producer that certain free buffers are discarded by the consumer.
     virtual void onBuffersDiscarded(const std::vector<int32_t>& slots) = 0; // Asynchronous
-<<<<<<< HEAD
     // onBufferDetached is called from IGraphicBufferConsumer::detachBuffer to
     // notify the producer that a buffer slot is free and ready to be dequeued.
     //
@@ -65,14 +64,11 @@ public:
     // This is called without any lock held and can be called concurrently by
     // multiple threads. This callback is enabled only when needsAttachNotify()
     // returns {@code true}.
-    virtual void onBufferAttached() {} // Asynchronous
     virtual bool needsAttachNotify() { return false; }
 #endif
-=======
 
     // MIUI ADD
     virtual void onBufferDetached(int slot) = 0;
->>>>>>> ebdbdd810c (Native: ProducerListener: Import ON_BUFFER_DETACHED Changes)
 };
 
 #ifndef NO_BINDER
